@@ -50,3 +50,11 @@ load.load_training(digits = [2])
 
 
 trying this
+
+from pylab import *
+from numpy import *
+from loader import Loader
+load = Loader("testing")
+images, labels = load.load_dataset([2])
+imshow(images.mean(axis=0), cmap=cm.gray)
+show()
