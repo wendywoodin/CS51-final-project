@@ -1,0 +1,49 @@
+*****PROJECT PLANNING DOCUMENT*****
+
+**USEFUL NOTES**
+    - When adding a new file to the repository run:
+        git add "file name"
+
+**DATES**
+April 10th: 
+    Draft proposal due (official)
+April 17th: 
+    More serious proposal due (official)
+    Get a skeleton of functions needed, etc up (personal)
+    Have data imported (personal)
+April 24th:
+    Functionality check-in (official)
+    Have core functionality working (personal)
+        Able to get <20% error on MNIST training set
+
+
+********************************
+SOURCES
+
+for loading in data:
+http://andrew.gibiansky.com/blog/machine-learning/k-nearest-neighbors-simplest-machine-learning/
+https://github.com/sorki/python-mnist/commit/06698fd5546d8d2c36dd0df7066fb407dc9aefb5
+
+
+
+********************************
+NOTES
+
+The loader is now done. I added digit specific functionality
+
+To load into a file:
+
+from loader import Loader
+
+load = Loader()
+load.load_testing()
+  or
+load.load_training()
+
+if you want to only do some digits
+
+load = Loader()
+load.load_testing(digits = [2,3,4])
+  or
+load.load_training(digits = [2])
+(digits were chosen arbitrarily, do an array containing 0-9, or just one digit)
