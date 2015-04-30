@@ -4,6 +4,7 @@ import argparse
 
 from knn import KNNClassification
 #from kmeans import Kmeans
+from kmeans_test import KMeanClassification
 from loader import Loader
 from visualization import Visualizer
 
@@ -19,7 +20,8 @@ class PredictionRunner:
 
         if self.choices[0][0] != "none":
             if self.choices[0][1] == []:
-                kmeans_accuracy = [0.0]
+                KMeanClassification(images,labels)
+                print("I ran it")
             else:
                 for k in self.choices[0][1]:
                     kmeans_accuracy.append(0.0)
@@ -48,7 +50,7 @@ class PredictionRunner:
             visualize.kmeans(kmeans_accuracy, kmeans_k)
         elif knn_accuracy != []:
             visualize.knn(knn_accuracy, knn_k)
-    
+
     def evaluate(self, predictions, answers):
         index = range(len(predictions))
         correct = 0
@@ -58,14 +60,14 @@ class PredictionRunner:
         total = len(predictions)
         return (float(correct)/float(total)*100.)
 
-        
-        
+
+
     def __init__(self, args, images, labels):
 
         self.default_kmeansk = [50]
         self.default_knnk = [10]
-        self.choices = [("none", []), ("none", [])]       
-       
+        self.choices = [("none", []), ("none", [])]
+
         if args.kmeans:
             if args.kmeansk:
                 self.choices[0] = ("kmeans", args.kmeansk)
@@ -77,9 +79,9 @@ class PredictionRunner:
                 self.choices[1] = ("knn", args.knnk)
             else:
                 self.choices[1] = ("knn", [])
-        
+
         self.run_prediction()
-        
+
         sys.exit()
 
 if __name__ == "__main__":
