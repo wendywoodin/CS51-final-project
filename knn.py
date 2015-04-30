@@ -5,7 +5,7 @@ import random
 import sys
 
 class KNNClassification(object):
-    def __init__(self, images, labels, k = 10):
+    def __init__(self, images, labels, k = 20):
         # initializes the classification method for knn
         # needs itself, a dataset, and a k
         self.dataset = []
@@ -37,10 +37,12 @@ class KNNClassification(object):
         # calculates the distance between two images in the database
         # we'll start out with the simplest (euclidean) and then optimize
         return np.linalg.norm(image1-image2)#sum((image1 - image2)**2)
-
+    
+    # Wrong code???
     def majority(self,votes):
         options = [0,0,0,0,0,0,0,0,0,0]
         for vote in votes:
+            # print (vote)
             options[vote] += 1
         highest = (sorted(options)).pop()
         if options.count(highest) > 1:
@@ -63,5 +65,6 @@ class KNNClassification(object):
         answers = []
         for i in range(len(to_test)):
             answers.append(self.labels[to_test[i]])
+            # print(self.labels[to_test[i]])
         # return the predictions and the answers
         return all_preds, answers
