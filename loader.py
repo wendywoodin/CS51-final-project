@@ -28,13 +28,13 @@ class Loader:
         image_raw = pyarray("B", image_file.read())
         image_file.close()
     
-        # Initialize arrays in which we can store the values, set all to zeros
-        images = np.zeros((size, rows, cols), dtype = np.uint8)
-        labels = np.zeros((size, 1), dtype = np.uint8)
-    
         # Make an index we can iterate across to load in the values
         index = [k for k in range(size) if label_raw[k] in digits]
         length = len(index)
+
+        # Initialize arrays in which we can store the values, set all to zeros
+        images = np.zeros((length, rows, cols), dtype = np.uint8)
+        labels = np.zeros((length, 1), dtype = np.uint8)
     
         # Make the data fit nicely into our matrix-like arrays
         for i in range(length):
