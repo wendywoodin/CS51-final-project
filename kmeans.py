@@ -92,16 +92,20 @@ class KMeanClassification(object):
         cluster_labels = []
         centroids = 
         if (self.convergence(centroid, old_centroid) == True):
-
-            for item in clusters:
-                x, y = item
-                cluster_labels.append(y)
-
+            # Taking most_common out of all of points?
+            for key, (x,y) in clusters:
+                for k in key:
+                    cluster_labels.append(y)
+            # The problem is that how do I get 40 individual most_common?
             most_common = mode(cluster_labels)
+            for key(x,y) in clusters:
+                # How exactly do I index into the key and access the 
+                # actual centroid as an (img, label)
+                for (x,y) in key:
+                    y = most_common
 
             #for item in clusters:
                 #majority = max((Counter(x).most_common(1)[0]), key=itemgetter(1))[0]
-
             for index, img in enumerate(centroid):
                 # temp = list(centroid[index])
                 # temp[0] = most_common
@@ -109,7 +113,6 @@ class KMeanClassification(object):
 
                 # FOR EACH POINT IN CLUSTER
                     # If centroidpoint and cluster point within range
-
                         self.dataset[img][] = most_common
                 # Does this actually work?
                 # new_centroid_label[]
@@ -121,13 +124,13 @@ class KMeanClassification(object):
    def predictions(self):
     # Split the dataset: say dataset2 is the real dataset and dataset
     # 1 is the training set
-    for x in dataset2:
-        for c in centroid:
+    for (x, y) in dataset2:
+        for (c1,c2) in centroid:
+            
             # I'm not 100% sure that this works becasue of centroid [c[0]]
-            closest_centroid = min([self.euclidean_distance(datset2[x][0],centroid[c[0]])], key = lambda val: val[0])
-            for y in enumerate(dataset2):
-                    temp = list(dataset[y])
-                    temp[1] = majority(self, dataset2, clusters)
-                    centroid[c] = tuple(temp)
+            #for y in enumerate(dataset2):
+                    #temp = list(dataset[y])
+                    #temp[1] = majority(self, dataset2, clusters)
+                    #centroid[c] = tuple(temp)
     return dataset2
 
