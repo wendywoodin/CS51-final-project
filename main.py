@@ -11,57 +11,43 @@ from visualization import Visualizer
 class PredictionRunner:
 
     def run_prediction(self):
-       num_inputs = len(self.prediction_algorithms)
-       visualize = Visualizer()
-       
-       if num_inputs == 3:
-           print("running both kmeans and knn with k")
-           knn_accuracy = []
-           for k in self.prediction_algorithms[2]:
-               knn = KNNClassification(images, labels, k)
-               predictions, answers = knn.predictions()
-               result = self.evaluate(predictions, answers)
-               knn_accuracy.append(result)
-           kmeans_accuracy = 0.0
-           visualize.kmeans_knn_k(knn_accuracy, self.prediction_algorithms[2], kmeans_accuracy)
-           for predict in knn_accuracy:
-               print("{}".format(predict))
-       
-       elif num_inputs == 2:
-           if self.prediction_algorithms[0] == "knn":
-               print("running knn with k")
-               knn_accuracy = []
-               for k in self.prediction_algorithms[1]:
-                   knn = KNNClassification(images, labels, k)
-                   predictions, answers = knn.predictions()
-                   result = self.evaluate(predictions, answers)
-                   knn_accuracy.append(result)
-               visualize.knn_k(knn_accuracy, self.prediction_algorithms[1])
-               for predict in knn_accuracy:
-                   print("{}".format(predict))
-           else:
-               print("running knn with no k and kmeans")
-               knn = KNNClassification(images, labels)
-               predictions, answers = knn.predictions()
-               knn_accuracy = self.evaluate(predictions, answers)
-               kmeans_accuracy = 0.0
-               visualize.kmeans_knn(knn_accuracy, kmeans_accuracy)
-               print("{}".format(knn_accuracy))
-               
-       elif num_inputs == 1:
-           if self.prediction_algorithms[0] == "kmeans":
-               print("running kmeans")
-               kmeans_accuracy = 0.0
-               visualize.kmeans(kmeans_accuracy)
-           else:
-               print("running knn")
-               knn = KNNClassification(images, labels)
-               predictions, answers = knn.predictions()
-               knn_accuracy = self.evaluate(predictions, answers)
-               visualize.knn(knn_accuracy)
-               print("{}".format(knn_accuracy))
-       else:
-           raise ValueError ("Invalid inputs")
+
+        knn_accuracy = []
+        kmeans_accuracy = []
+        kmeans_k =  self.default_kmeansk
+        knn_k = self.default_knnk
+
+        if self.choices[0][0] != "none":
+            if self.choices[0][1] == []:
+                kmeans_accuracy = [0.0]
+            else:
+                for k in self.choices[0][1]:
+                    kmeans_accuracy.append(0.0)
+                kmeans_k = self.choices[0][1]
+
+        if self.choices[1][0] != "none":
+            if self.choices[1][1] == []:
+                knn = KNNClassification(images, labels)
+                predictions, answers = knn.predictions()
+                knn_accuracy = [self.evaluate(predictions, answers)]
+            else:
+                for k in self.choices[1][1]:
+                    knn = KNNClassification(images, labels, k)
+                    predictions, answers = knn.predictions()
+                    result = self.evaluate(predictions, answers)
+                    knn_accuracy.append(result)
+                knn_k = self.choices[1][1]
+
+        self.visualize(knn_accuracy, knn_k, kmeans_accuracy, kmeans_k)
+
+    def visualize(self, knn_accuracy, knn_k, kmeans_accuracy, kmeans_k):
+        visualize = Visualizer()
+        if knn_accuracy != [] and kmeans_accuracy != []:
+            visualize.kmeans_knn(knn_accuracy, knn_k, kmeans_accuracy, kmeans_k)
+        elif kmeans_accuracy != []:
+            visualize.kmeans(kmeans_accuracy, kmeans_k)
+        elif knn_accuracy != []:
+            visualize.knn(knn_accuracy, knn_k)
     
     def evaluate(self, predictions, answers):
         index = range(len(predictions))
@@ -76,19 +62,22 @@ class PredictionRunner:
         
     def __init__(self, args, images, labels):
 
-        self.prediction_algorithms = []   
-
+        self.default_kmeansk = [40]
+        self.default_knnk = [10]
+        self.choices = [("none", []), ("none", [])]       
+       
         if args.kmeans:
-            self.prediction_algorithms.append("kmeans")
-        
+            if args.kmeansk:
+                self.choices[0] = ("kmeans", args.kmeansk)
+            else:
+                self.choices[0] = ("kmeans", [])
+
         if args.knn:
-            self.prediction_algorithms.append("knn")
-            
-        if args.knn and args.kvalues:
-            self.prediction_algorithms.append(args.kvalues)
+            if args.knnk:
+                self.choices[1] = ("knn", args.knnk)
+            else:
+                self.choices[1] = ("knn", [])
         
-        
-            
         self.run_prediction()
         
         sys.exit()
@@ -97,7 +86,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Choose the algorithms to test on handwritten digit recognition.")
     parser.add_argument("-m", "--kmeans", help="Run kmeans", action = "store_true")
     parser.add_argument("-n","--knn", help="Run knn, if no k-value specified, default is used", action = "store_true")
-    parser.add_argument("-k", "--kvalues", metavar='N', type=int, nargs='+',help= "Choose k-values for knn (type -k # # #)")
+    parser.add_argument("-nk", "--knnk", metavar='N', type=int, nargs='+',help= "Choose k-values for knn (type -nk # # #)")
+    parser.add_argument("-mk", "--kmeansk", metavar='N', type=int, nargs='+', choices = [50,75,100],help= "Choose k-values for kmeans (type -mk # # #) (choose from 50,75,100)")
     args = parser.parse_args()
     if not(args.kmeans or args.knn):
         parser.print_help()
