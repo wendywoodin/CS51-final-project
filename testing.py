@@ -53,7 +53,7 @@ size = len(images)
 workable = np.zeros((size,rows*cols))
 
 for i in range(size):
-    workable[i] = images[i].flatten()    
+    workable[i] = images[i].flatten()
 
 # Now let's get a variable for the length of the new vector thing
 
@@ -106,5 +106,56 @@ matrix_pca = np.hstack((to_be))
 # transformed = matrix_pca.T.dot(workable)
 transformed = workable.dot(matrix_pca)
 
+'''
+Checking out index finding
+'''
+import numpy as np
+from scipy.stats import mode
 
+rows = 3
+cols = 3
 
+images = np.zeros((5,3,3))
+for i in range(len(images)):
+    images[i] = np.array([2*i,2*i+1,2*i+2,2*i+3,2*i+4,\
+        2*i+5,2*i+6,2*i+7,2*i+8]).reshape((3,3))
+
+labels = np.zeros((5,1))
+labels[0] = 0
+labels[1] = 0
+labels[2] = 1
+labels[3] = 1
+labels[4] = 1
+
+size = len(images)
+data = np.zeros((size,rows*cols))
+
+for i in range(size):
+    data[i] = images[i].flatten()
+
+centroids = np.array([[1,2,3,4,5,6,7,8,9],[0,1,2,3,4,5,6,7,8]])
+
+clusters = np.array([[data[4],data[2]],[data[0],data[1],data[3]]])
+
+# Getting the original indices of the datapoints in the clusters
+
+cluster_indices = [[] for i in range(len(centroids))]
+
+for i in range(len(clusters)):
+    cluster_indices[i] = [np.where(data == clusters[i][x])[0][0] for x in range(len(clusters[i]))]
+
+# Getting the labels of the datapoints by index
+
+cluster_labels = [[] for i in range(len(cluster_indices))]
+
+for i in range(len(cluster_indices)):
+    cluster_labels[i] = [labels[cluster_indices[i][x]] for x in range(len(cluster_indices[i]))]
+
+# Assigning labels to centroids
+
+centroid_labels = []
+
+for i in range(len(cluster_labels)):
+    centroid_labels.append(mode(cluster_labels[i])[0])
+
+print("{}".format(centroid_labels))

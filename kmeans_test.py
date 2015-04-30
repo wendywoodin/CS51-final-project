@@ -1,11 +1,33 @@
 import numpy as np
 import random
 import sys
+from scipy.stats import mode
 
 class KMeanClassification(object):
-    def __init__(self, images, labels, k = 10):
+    def __init__(self, images, labels, k = 5):
         # get data
-        size = len(images)
+        # we want to randomly choose 50 points that we are testing
+        random.seed()
+        # set up a list of 50 randomly chosen indices
+        to_test_index = []
+        for i in range(len(images)/2):
+            to_test_index.append(random.randint(0,len(images)-1))
+        # get our answers from the proper indices of the labels
+
+        to_test = []
+        for i in range(len(to_test_index)):
+            to_test.append(images[to_test_index[i]])
+
+        answers = []
+        for i in range(len(to_test_index)):
+            answers.append(labels[to_test_index[i]])
+
+        to_train = []
+        for i in range(len(images)):
+            if not(i in to_test_index):
+                to_train.append(images[i])
+
+        size = len(to_test)
 
         rows = 28
         cols = 28
@@ -13,7 +35,7 @@ class KMeanClassification(object):
         data = np.zeros((size,rows*cols))
 
         for i in range(size):
-            data[i] = images[i].flatten()
+            data[i] = to_test[i].flatten()
 
         # define random start centroids
         centroids = self.init_randoms(k, rows*cols)
@@ -38,6 +60,38 @@ class KMeanClassification(object):
 
             error = self.error(centroids, clusters)
             print error
+
+        # Getting the original indices of the datapoints in the clusters
+
+        small_clusters = []
+
+        for i in range(len(clusters)):
+            smallest = min(len(clusters[i]), 100)
+            small_clusters.append(clusters[i][0:smallest])
+
+        cluster_indices = [[] for i in range(len(centroids))]
+
+        for i in range(len(small_clusters)):
+            cluster_indices[i] = [np.where(data == small_clusters[i][x])[0][0] for x in range(len(small_clusters[i]))]
+
+        # Getting the labels of the datapoints by index
+
+        cluster_labels = [[] for i in range(len(cluster_indices))]
+
+        for i in range(len(cluster_indices)):
+            cluster_labels[i] = [labels[cluster_indices[i][x]] for x in range(len(cluster_indices[i]))]
+
+        # Assigning labels to centroids
+
+        centroid_labels = []
+
+        for i in range(len(cluster_labels)):
+            label_all = mode(cluster_labels[i])
+            label = label_all[0]
+            centroid_labels.append(label)
+
+        print("{}".format(centroid_labels))
+
 
     # return True if convergence
     def convergence(self, error):

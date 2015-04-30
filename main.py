@@ -89,7 +89,7 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--kmeans", help="Run kmeans", action = "store_true")
     parser.add_argument("-n","--knn", help="Run knn, if no k-value specified, default is used", action = "store_true")
     parser.add_argument("-nk", "--knnk", metavar='N', type=int, nargs='+',help= "Choose k-values for knn (type -nk # # #)")
-    parser.add_argument("-mk", "--kmeansk", metavar='N', type=int, nargs='+', choices = [50,75,100],help= "Choose k-values for kmeans (type -mk # # #) (choose from 50,75,100)")
+    parser.add_argument("-mk", "--kmeansk", metavar='N', type=int, nargs='+', choices = [10,15,20],help= "Choose k-values for kmeans (type -mk # # #) (choose from 10,15,20)")
     args = parser.parse_args()
     if not(args.kmeans or args.knn):
         parser.print_help()
