@@ -4,6 +4,7 @@ import sys
 from operator import itemgetter
 from collections import defaultdict
 from collections import Counter
+from scipy.stats import mode
 
 class KMeanClassification(object):
 # KMean will generate labelled clusters 
@@ -66,12 +67,31 @@ class KMeanClassification(object):
          return clusters
 
    def majority(self, dataset, clusters):
-        if self.convergence(centroid, old_centroid) = true:
-            for x in clusters:
-                majority = max((Counter(x).most_common(1)[0]), key=itemgetter(1))[0]
-                for c in enumerate(centroid):
-                    temp = list(centroid[c])
-                    temp[0] = majority????????????????
+        cluster_labels = []
+        if (self.convergence(centroid, old_centroid) == True):
+
+            for item in clusters:
+                x, y = item
+                cluster_labels.append(y)
+
+            most_common = mode(cluster_labels)
+
+
+
+
+
+
+            #for item in clusters:
+                #majority = max((Counter(x).most_common(1)[0]), key=itemgetter(1))[0]
+
+             
+
+
+
+                majority = 
+                for index, item in enumerate(centroid):
+                    temp = list(centroid[index])
+                    temp[0] = most_common
                     centroid[c] = tuple(temp)
                     # Does this actually work?
                     # new_centroid_label[]
