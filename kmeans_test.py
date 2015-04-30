@@ -25,7 +25,12 @@ class KMeanClassification(object):
         to_train = []
         for i in range(len(images)):
             if not(i in to_test_index):
-                to_train.append(images[i])
+                to_train.append(images[i].flatten())
+
+        to_train_labels = []
+        for i in range(len(images)):
+            if not(i in to_test_index):
+                to_train_labels.append(labels[i])
 
         size = len(to_test)
 
@@ -72,7 +77,7 @@ class KMeanClassification(object):
         cluster_indices = [[] for i in range(len(centroids))]
 
         for i in range(len(small_clusters)):
-            cluster_indices[i] = [np.where(data == small_clusters[i][x])[0][0] for x in range(len(small_clusters[i]))]
+            cluster_indices[i] = [np.where(to_train == small_clusters[i][x])[0][0] for x in range(len(small_clusters[i]))]
 
         # Getting the labels of the datapoints by index
 
