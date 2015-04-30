@@ -1,10 +1,6 @@
 import numpy as np
 import random
 import sys
-from operator import itemgetter
-from collections import defaultdict
-from collections import Counter
-from scipy.stats import mode
 
 class KMeanClassification(object):
     def __init__(self, images, labels, k = 10):
@@ -23,8 +19,6 @@ class KMeanClassification(object):
         centroids = self.init_randoms(k, rows*cols)
         clusters = []
 
-        self.prev = {}
-
         self.i = 0
 
         self.max_i = 200
@@ -32,6 +26,8 @@ class KMeanClassification(object):
         self.last_error = 0
 
         error = -1
+
+        print("Showing errors for kmeans (watch it converge!)")
 
         # iterate until convergence
         while not self.convergence(error):
