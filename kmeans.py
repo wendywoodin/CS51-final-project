@@ -32,33 +32,40 @@ class KMeanClassification(object):
     def euclidian_distance (image1, image2):
     # Retrieve the Euclidian distance 
         return np.linalg.norm(image1 - image2)
-        # return np.sqrt(sum((pixel1 - pixel2) ** 2))
+        # return np.sqrt(sum((image1 - image2) ** 2))
     
     def label_assignment (self, dataset, centroid):
     # Give each point a label by finding nearest centroid
     # and assign point to nearest centroid and making it part of 
     # a cluster
-        clusters = []
-        # Will a touple work for this?
-        for x in dataset:
-          for c in centroid:
-            # I'm not 100% sure that this works becasue of centroid [c[0]]
-            closest_centroid = min([self.euclidean_distance(dataset[x][0],centroid[c[0]])], key = lambda val: val[0])
-            clusters[closest_centroid].append(x)
+        clusters = {}
+        for (x, y) in dataset:
+          centroid_key = min([i[0], self.euclidean_distance(dataset[x][0],c[0]), 
+            for c in enumerate(centroid)], key = lambda val:val[1])[0]
+            try:
+                clusters[centroid_key].append(x)
+            except KeyError:
+                clusters[closest_centroid] = [x]
         return clusters
     
     def change_centroid(centroid, clusters):
     # Change centroids according to the mean of the points
     # in the clusters
         new_centroid = []
-        cluster_images = []
-        cluster_labels = []
-        for c in clusters:
-            cluster_images.append(c[0])
-            cluster_labels.append(c[1])
-        centroid_image = np.mean(cluster_images, axis = 0)
-        return centroid_image
-   # This doesn't work?     
+        #cluster_images = []
+        #cluster_labels = []
+        keys = list.sort(clusters.keys())
+        for x in keys:
+            new_centroid.append(np.mean(clusters[k]))
+        # How to sort keys!!!!!
+        # keys = clusters.sort(key = lambda val: val[0])
+        #for c in clusters:
+         #   cluster_images.append(c[0])
+          #  cluster_labels.append(c[1])
+        #centroid_image = np.mean(cluster_images, axis = 0)
+        #return centroid_image
+        return new_centroid
+
     def convergence(centroid, old_centroid):
         return (str(old_centroid) == str(centroid))
     # Returns true if the centroids can no longer be re-defined
@@ -74,10 +81,12 @@ class KMeanClassification(object):
          centroid = random.sample(dataset, self.k)
          while not self.convergence(centroid, old_centroid):
              old_centroid = centroid
+             # clusters = cluster_points(dataset, centroid)
              clusters = self.label_assignment(dataset, centroid)
-
+             # centroid = reevaluate_centers(old_centroid, clusters)
+             for centroid in old_centroid:
                 centroid = self.change_centroid(old_centroid, clusters)    
-         return centroid, clusters
+         return (centroid, clusters)
 
    def majority(self, dataset, clusters):
         cluster_labels = []
@@ -101,8 +110,6 @@ class KMeanClassification(object):
                 # FOR EACH POINT IN CLUSTER
                     # If centroidpoint and cluster point within range
 
-                        
-
                         self.dataset[img][] = most_common
                 # Does this actually work?
                 # new_centroid_label[]
@@ -112,8 +119,8 @@ class KMeanClassification(object):
 
 
    def predictions(self):
-    # Split the dataset in half?? How do I do this, anyway, say dataset2 
-    # is the real dataset with
+    # Split the dataset: say dataset2 is the real dataset and dataset
+    # 1 is the training set
     for x in dataset2:
         for c in centroid:
             # I'm not 100% sure that this works becasue of centroid [c[0]]
