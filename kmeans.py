@@ -88,16 +88,16 @@ class KMeanClassification(object):
 
 
 
-                majority = 
-                for index, item in enumerate(centroid):
-                    temp = list(centroid[index])
-                    temp[0] = most_common
-                    centroid[c] = tuple(temp)
-                    # Does this actually work?
-                    # new_centroid_label[]
-                    # centroid = new_centroid_label.items
-                    # centroid = self.dataset [images][label!!! change this]
-        return centroid
+            majority = 
+            for index, item in enumerate(centroid):
+                temp = list(centroid[index])
+                temp[0] = most_common
+                centroid[c] = tuple(temp)
+                # Does this actually work?
+                # new_centroid_label[]
+                # centroid = new_centroid_label.items
+                # centroid = self.dataset [images][label!!! change this]
+    return centroid
 
 
    def predictions(self):
