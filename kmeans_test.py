@@ -39,8 +39,6 @@ class KMeanClassification(object):
             error = self.error(centroids, clusters)
             print error
 
-        import pdb; pdb.set_trace()
-
     # return True if convergence
     def convergence(self, error):
         if self.last_error == error or self.i > self.max_i:

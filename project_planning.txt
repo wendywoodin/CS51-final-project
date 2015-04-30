@@ -5,9 +5,9 @@
         git add "file name"
 
 **DATES**
-April 10th: 
+April 10th:
     Draft proposal due (official)
-April 17th: 
+April 17th:
     More serious proposal due (official)
     Get a skeleton of functions needed, etc up (personal)
     Have data imported (personal)
@@ -58,3 +58,8 @@ load = Loader("testing")
 images, labels = load.load_dataset([2])
 imshow(images.mean(axis=0), cmap=cm.gray)
 show()
+
+
+(Pdb) plt.pyplot.imshow(centroids[6].reshape(28, 28))
+<matplotlib.image.AxesImage object at 0xaf0aee8c>
+(Pdb) plt.pyplot.show()
