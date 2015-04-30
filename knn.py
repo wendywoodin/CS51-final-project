@@ -1,4 +1,3 @@
-from collections import defaultdict
 import warnings
 import numpy as np
 import random

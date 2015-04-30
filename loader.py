@@ -19,7 +19,6 @@ class Loader:
         if magic_number != 2049:
             warnings.warn("Wrong magic number")
         label_raw = pyarray("b", label_file.read())
-        print(label_raw[1:100])
         label_file.close()
 
         image_file = open(fname_images, 'rb')

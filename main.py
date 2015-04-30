@@ -62,7 +62,7 @@ class PredictionRunner:
         
     def __init__(self, args, images, labels):
 
-        self.default_kmeansk = [40]
+        self.default_kmeansk = [50]
         self.default_knnk = [10]
         self.choices = [("none", []), ("none", [])]       
        

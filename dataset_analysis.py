@@ -1,5 +1,6 @@
 import numpy as np
 from loader import Loader
+import matplotlib.pyplot as plt
 
 load = Loader("testing")
 
@@ -63,6 +64,9 @@ min_sim_same = min(similarities_same_digits)
 max_sim_same = max(similarities_same_digits)
 # 137.15349426741975
 
+# For graphing purposes
+x_axis_same = [1.,1.,1.,1.,1.,1.,1.,1.,1.,1.]
+
 
 # Set up checking for similarity between similar but not same digits
 diff_2_3 = []
@@ -99,4 +103,12 @@ min_diff_sim = min(diffs_sim_digits)
 max_diff_sim = max(diffs_sim_digits)
 # 138.44045771113068
 
+# For graphing purposes
+x_axis_diff = [1.,1.,1.,1.,1.,1.,1.,1.]
+
+plt.plot(x_axis_same, similarities_same_digits, 'bo', x_axis_diff, diffs_sim_digits, 'rs')
+plt.xlabel('same digits = blue, different digits = red')
+plt.ylabel('average distance')
+plt.title('Average distances between different digits')
+plt.show()
 
