@@ -6,6 +6,8 @@ from loader import Loader
 # dataset. Places where the code fails in the appliance are marked.
 # Using my computer outside the appliance gets us slightly farther.
 
+# Note: Looked at code from http://sebastianraschka.com/Articles/2014_pca_step_by_step.html
+
 load = Loader("testing")
 
 images,labels = load.load_dataset()
@@ -21,7 +23,7 @@ k = 50
 workable = np.zeros((size,rows*cols))
 
 for i in range(size):
-    workable[i] = images[i].flatten()    
+    workable[i] = images[i].flatten()
 
 # Now let's get a variable for the length of the new vector thing
 length = len(workable[0])

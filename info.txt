@@ -1,0 +1,3 @@
+
+title: Handwritten Digit Recognition Using KNN and Kmeans
+seas-usernames: cbalaki, elmessiri, woodin
