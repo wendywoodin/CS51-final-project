@@ -3,6 +3,7 @@ import numpy as np
 import random
 import sys
 
+# Note: Looked at code from http://andrew.gibiansky.com/blog/machine-learning/k-nearest-neighbors-simplest-machine-learning/
 class KNNClassification(object):
     def __init__(self, images, labels, k = 20):
         # initializes the classification method for knn
@@ -17,7 +18,7 @@ class KNNClassification(object):
     def predict (self, point, index):
         # the prediction function, takes in itself and a point to be classified
         # uses the function distance, which takes the distance btwn 2 data pts
-        
+
         # we make sure to not test the point against itself
         distances = []
         for i in range(len(self.dataset)):
@@ -28,15 +29,15 @@ class KNNClassification(object):
 
         values = zip(distances, self.dataset)
         values.sort(key = lambda val: val[0])
-        
+
         prediction = self.majority([value[1][1] for value in values[0:self.k]])
         return prediction
-      
+
     def euclidean_distance (self,image1, image2):
         # calculates the distance between two images in the database
         # we'll start out with the simplest (euclidean) and then optimize
         return np.linalg.norm(image1-image2)#sum((image1 - image2)**2)
-    
+
     # Wrong code???
     def majority(self,votes):
         options = [0,0,0,0,0,0,0,0,0,0]
@@ -47,8 +48,8 @@ class KNNClassification(object):
         if options.count(highest) > 1:
             warnings.warn("Multiple digits tied for best in knn")
         return options.index(highest)
-        
-                
+
+
     def predictions(self):
         # we want to randomly choose 50 points that we are testing
         random.seed()

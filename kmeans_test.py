@@ -118,7 +118,7 @@ class KMeanClassification(object):
         self.answers = all_answers[0:51]
         self.centroid_labels = centroid_labels
 
-
+    # Kmeans with help from Tomas Reimers
     def return_things(self):
         # running the predictions
         predictions = []

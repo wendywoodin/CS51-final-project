@@ -3,6 +3,7 @@ from array import array as pyarray
 import numpy as np
 import warnings
 
+# Note: Looked at code from http://g.sweyla.com/blog/2012/mnist-numpy/
 class Loader:
 
     def __init__(self, dataset, path='.'):
@@ -27,7 +28,7 @@ class Loader:
             warnings.warn("Wrong magic number")
         image_raw = pyarray("B", image_file.read())
         image_file.close()
-    
+
         # Make an index we can iterate across to load in the values
         index = [k for k in range(size) if label_raw[k] in digits]
         length = len(index)
@@ -35,28 +36,28 @@ class Loader:
         # Initialize arrays in which we can store the values, set all to zeros
         images = np.zeros((length, rows, cols), dtype = np.uint8)
         labels = np.zeros((length, 1), dtype = np.uint8)
-    
+
         # Make the data fit nicely into our matrix-like arrays
         for i in range(length):
             images[i] = np.array(image_raw[(index[i]*rows*cols) : ((index[i]+1)*rows*cols)]).reshape((rows,cols))
             labels[i] = label_raw[index[i]]
-        
+
         return images, labels
 
-    
+
     def load_testing(self, digits):
         fname_images = os.path.join(self.path, 'test_images')
         fname_labels = os.path.join(self.path, 'test_labels')
-        
+
         return self.load_alldata(fname_images, fname_labels, digits)
-    
-    
-    def load_training(self, digits):      
+
+
+    def load_training(self, digits):
         fname_images = os.path.join(self.path, 'train_images')
         fname_labels = os.path.join(self.path, 'train_labels')
-        
+
         return self.load_alldata(fname_images, fname_labels, digits)
-        
+
     def load_dataset(self, digits=np.arange(10)):
         if self.dataset == "testing":
             return self.load_testing(digits)
@@ -64,4 +65,3 @@ class Loader:
             return self.load_training(digits)
         else:
             raise ValueError ("Invalid dataset type")
-        
