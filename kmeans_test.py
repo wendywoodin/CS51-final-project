@@ -2,9 +2,10 @@ import numpy as np
 import random
 import sys
 from scipy.stats import mode
+import pdb
 
 class KMeanClassification(object):
-    def __init__(self, images, labels, k = 5):
+    def __init__(self, images, labels, k = 10):
         # get data
         # we want to randomly choose 50 points that we are testing
         random.seed()
@@ -16,7 +17,7 @@ class KMeanClassification(object):
 
         to_test = []
         for i in range(len(to_test_index)):
-            to_test.append(images[to_test_index[i]])
+            to_test.append(images[to_test_index[i]].flatten())
 
         answers = []
         for i in range(len(to_test_index)):
@@ -37,10 +38,6 @@ class KMeanClassification(object):
         rows = 28
         cols = 28
 
-        data = np.zeros((size,rows*cols))
-
-        for i in range(size):
-            data[i] = to_test[i].flatten()
 
         # define random start centroids
         centroids = self.init_randoms(k, rows*cols)
@@ -59,7 +56,7 @@ class KMeanClassification(object):
         # iterate until convergence
         while not self.convergence(error):
             # assign things to centroids
-            clusters = self.update_cluster(data, centroids)
+            clusters = self.update_cluster(to_train, centroids)
             # update centroids
             centroids = self.update_centroids(clusters, rows*cols)
 
@@ -68,16 +65,36 @@ class KMeanClassification(object):
 
         # Getting the original indices of the datapoints in the clusters
 
+        # Get rid of the centroids without points associated
+        new_points = []
+        for i in range(len(clusters)):
+            if len(clusters[i]) != 0:
+                new_points.append(i)
+        new_clusters = []
+        new_centroids = []
+        for i in range(len(clusters)):
+            if i in new_points:
+                new_clusters.append(clusters[i])
+                new_centroids.append(centroids[i])
+
+        # Work with some smaller clusters when checking indices (for memory/time)
+        # Also turn it into a list for later so we can do index checking
         small_clusters = []
 
-        for i in range(len(clusters)):
-            smallest = min(len(clusters[i]), 100)
-            small_clusters.append(clusters[i][0:smallest])
+        for i in range(len(new_clusters)):
+            smallest = min(len(new_clusters[i]), 100)
+            small_clusters.append(new_clusters[i][0:smallest])
 
-        cluster_indices = [[] for i in range(len(centroids))]
+        # get the indices of the items in the cluster
 
+        # first we have to do some odd things with lists/arrays
+        list_train = []
+        for i in range(len(to_train)):
+            list_train.append(to_train[i].tolist())
+
+        cluster_indices = [[] for i in range(len(new_centroids))]
         for i in range(len(small_clusters)):
-            cluster_indices[i] = [np.where(to_train == small_clusters[i][x])[0][0] for x in range(len(small_clusters[i]))]
+            cluster_indices[i] = [list_train.index(small_clusters[i][x].tolist()) for x in range(len(small_clusters[i]))]
 
         # Getting the labels of the datapoints by index
 
@@ -95,6 +112,7 @@ class KMeanClassification(object):
             label = label_all[0]
             centroid_labels.append(label)
 
+        pdb.set_trace()
         print("{}".format(centroid_labels))
 
 
