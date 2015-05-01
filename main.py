@@ -23,10 +23,9 @@ class PredictionRunner:
                 kmeans = KMeanClassification(images,labels)
                 predictions, answers = kmeans.return_things()
                 kmeans_accuracy = self.evaluate(predictions,answers)
-                print("I ran it")
             else:
-                for k in self.choices[0][1]:
-                    kmeans_accuracy.append(0.0)
+                kmeans = KMeanClassification(images,labels,self.choices[0][1])
+                predictions, answers = kmeans.return_things()
                 kmeans_k = self.choices[0][1]
 
         if self.choices[1][0] != "none":
@@ -66,7 +65,7 @@ class PredictionRunner:
 
     def __init__(self, args, images, labels):
 
-        self.default_kmeansk = [50]
+        self.default_kmeansk = [10]
         self.default_knnk = [10]
         self.choices = [("none", []), ("none", [])]
 
