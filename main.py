@@ -20,7 +20,9 @@ class PredictionRunner:
 
         if self.choices[0][0] != "none":
             if self.choices[0][1] == []:
-                KMeanClassification(images,labels)
+                kmeans = KMeanClassification(images,labels)
+                predictions, answers = kmeans.return_things()
+                kmeans_accuracy = self.evaluate(predictions,answers)
                 print("I ran it")
             else:
                 for k in self.choices[0][1]:

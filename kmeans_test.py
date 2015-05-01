@@ -19,9 +19,9 @@ class KMeanClassification(object):
         for i in range(len(to_test_index)):
             to_test.append(images[to_test_index[i]].flatten())
 
-        answers = []
+        all_answers = []
         for i in range(len(to_test_index)):
-            answers.append(labels[to_test_index[i]])
+            all_answers.append(labels[to_test_index[i]].tolist())
 
         to_train = []
         for i in range(len(images)):
@@ -112,8 +112,22 @@ class KMeanClassification(object):
             label = label_all[0]
             centroid_labels.append(label)
 
-        pdb.set_trace()
-        print("{}".format(centroid_labels))
+        self.testing = to_test[0:51]
+        self.testing = [test.tolist() for test in self.testing]
+        self.test_centroids = [centroid.tolist() for centroid in new_centroids]
+        self.answers = all_answers[0:51]
+        self.centroid_labels = centroid_labels
+
+
+    def return_things(self):
+        # running the predictions
+        predictions = []
+        for test in self.testing:
+            guess = min([(self.distance(np.array(test), np.array(centroid)),centroid)\
+                for centroid in self.test_centroids], key = lambda val: val[0])[1]
+            idx = self.test_centroids.index(guess)
+            predictions.append((self.centroid_labels[idx].tolist())[0])
+        return predictions, self.answers
 
 
     # return True if convergence
